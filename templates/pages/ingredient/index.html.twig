@@ -1,16 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ingredients - Symrecipe{% endblock %}
+{% block title %}Ingredients List - Symrecipe{% endblock %}
 
 {% block body %}
 
-<div class="container mt-4">
-    <h1 class="text-center">ingredients</h1>
+<div class="container mt-5">
+    <h1 class="text-center">Ingredients</h1>
 
     {% if not ingredients.items is same as([]) %}
 
-    <div class="count my-4">
-        <h5>Ingredients total :{{ ingredients.getTotalItemCount }}</h5>
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success mt-4">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="count my-5">
+        <h5>Ingredients total : {{ ingredients.getTotalItemCount }}</h5>
     </div>
 
         <table class="table table-hover">
