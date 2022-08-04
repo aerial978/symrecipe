@@ -31,7 +31,7 @@ class IngredientController extends AbstractController
     }
 
     #[Route('/ingredient/new', name: 'ingredient.new', methods: ['GET','POST'])]
-    public function new(Request $request, EntityManagerInterface $manager): Response
+    public function new(EntityManagerInterface $manager, Request $request): Response
     {
         $ingredient = new Ingredient();
         $form = $this->createForm(IngredientType::class, $ingredient);
@@ -46,7 +46,7 @@ class IngredientController extends AbstractController
 
             $this->addFlash(
                 'success',
-                'Your ingredient was created !'
+                'Your ingredient was created successfully !'
             );
 
             return $this->redirectToRoute('ingredient.index');
@@ -55,5 +55,47 @@ class IngredientController extends AbstractController
         return $this->render('pages/ingredient/new.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    #[Route('/ingredient/edit/{id}', name: 'ingredient.edit', methods: ['GET','POST'])]
+    public function edit(ingredient $ingredient, EntityManagerInterface $manager, Request $request): Response
+    {
+        $form = $this->createForm(IngredientType::class, $ingredient);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $ingredient = $form->getData();
+
+            $manager->persist($ingredient);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Your ingredient was modified successfully !'
+            );
+
+            return $this->redirectToRoute('ingredient.index');
+        }
+        
+        
+        return $this->render('pages/ingredient/edit.html.twig', [
+            'form' => $form->createview()
+        ]);     
+    }
+
+    #[Route('/ingredient/delete/{id}', name: 'ingredient.delete', methods: ['GET'])]
+    public function delete(ingredient $ingredient, EntityManagerInterface $manager): Response
+    {
+        $manager->remove($ingredient);
+        $manager->flush();
+
+        $this->addFlash(
+            'success',
+            'Ingredient was delete successfully !'
+        );
+    
+        return $this->redirectToRoute('ingredient.index');
+
     }
 }
