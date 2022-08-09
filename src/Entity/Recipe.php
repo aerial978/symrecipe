@@ -58,7 +58,7 @@ class Recipe
 
     #[ORM\Column(type: 'datetime_immutable')]
     #[Assert\NotNull()]
-    private $updateAt;
+    private $updatedAt;
 
     #[ORM\ManyToMany(targetEntity: Ingredient::class)]
     private Collection $ingredients;
@@ -73,7 +73,7 @@ class Recipe
     #[ORM\PrePersist]
     public function setUpdateAtValue()
     {
-        $this->updateAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -179,12 +179,12 @@ class Recipe
 
     public function getUpdateAt(): ?\DateTimeImmutable
     {
-        return $this->updateAt;
+        return $this->updatedAt;
     }
 
-    public function setUpdateAt(\DateTimeImmutable $updateAt): self
+    public function setUpdateAt(\DateTimeImmutable $updatedAt): self
     {
-        $this->updateAt = $updateAt;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

@@ -3,8 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Recipe;
+use App\Entity\Ingredient;
+use App\Repository\IngredientRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -84,6 +87,7 @@ class RecipeType extends AbstractType
                 new Assert\LessThan(6)
             ]
         ])
+
         ->add('description', TextareaType::class, [
             'attr' => [
                 'class' => 'form-control',
@@ -98,6 +102,7 @@ class RecipeType extends AbstractType
                 new Assert\NotBlank(),
             ]
         ])
+
         ->add('price', MoneyType::class, [
             'attr' => [
                 'class' => 'form-control'
@@ -111,26 +116,43 @@ class RecipeType extends AbstractType
                 new Assert\LessThan(1001)
             ]
         ])
+
         ->add('isFavorite', CheckboxType::class, [
             'attr' => [
                 'class' => 'form-control'
             ],
+            'required' => false,
             'label' => 'Favoris ?',
             'label_attr' => [
                 'class' => 'form-label mt-4'
             ],
             'constraints' => [
-                new Assert\NotNull(),
+                new Assert\NotNull()
             ]
         ])
-            ->add('ingredients')
-            ->add('submit', SubmitType::class, [
-                'attr' => [
-                    'class' => 'btn btn-primary'
-                ],
-                'label' => 'Create Recipe'
-            ]);
-        ;
+
+        ->add('ingredients', EntityType::class, [  
+            'class' => Ingredient::class,
+            'query_builder' => function (IngredientRepository $r) {
+                return $r->createQueryBuilder('i')
+                    ->orderBy('i.name', 'ASC');
+            },
+            'label' => 'Ingredients',
+            'label_attr' => [
+                'class' => 'form-label mt-4'
+            ],
+            'choice_label' => 'name',
+            'multiple' => 'true',
+            'expanded' => 'true',
+        ])
+
+        ->add('submit', SubmitType::class, [
+            'attr' => [
+                'class' => 'btn btn-primary'
+            ],
+            'label' => 'Create Recipe'
+        ]);
+        
     }
 
     public function configureOptions(OptionsResolver $resolver): void
