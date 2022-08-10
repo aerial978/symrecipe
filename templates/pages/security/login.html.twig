@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login - Symrecipe{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="mt-4">Sign in</h1>
+        {% if error %}
+            <div class="alert alert-danger mt-4">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+        <div class="alert-info p-4">
+            <form action="{{ path('security.login') }}" method="post">
+                <div class="form-group">
+                    <label for="username" class="form-label mt-4">Email address</label>
+                    <input type="email" class="form-control" name="_username" id="username" value="{{ last_username }}"placeholder="example@symrecipe.com" >
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="form-label mt-4">Password</label>
+                    <input type="password" class="form-control" name="_password" id="password" placeholder="********">
+                </div>
+                <button type="submit" class="btn btn-primary mt-4">Login</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
