@@ -36,7 +36,7 @@ class RecipeController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $recipe = $form->getData();
+            $form->getData();
 
             $manager->persist($recipe);
             $manager->flush();
@@ -52,5 +52,46 @@ class RecipeController extends AbstractController
         return $this->render('pages/recipe/new.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    #[Route('/recipe/edit/{id}', name: 'recipe.edit', methods: ['GET','POST'])]
+    public function edit(recipe $recipe, EntityManagerInterface $manager, Request $request): Response
+    {
+        $form = $this->createForm(RecipeType::class, $recipe);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $recipe = $form->getData();
+
+            $manager->persist($recipe);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Your recipe was modified successfully !'
+            );
+
+            return $this->redirectToRoute('recipe.index');
+        }
+        
+        
+        return $this->render('pages/recipe/edit.html.twig', [
+            'form' => $form->createview()
+        ]);     
+    }
+
+    #[Route('/recipe/delete/{id}', name: 'recipe.delete', methods: ['GET'])]
+    public function delete(recipe $recipe, EntityManagerInterface $manager): Response
+    {
+        $manager->remove($recipe);
+        $manager->flush();
+
+        $this->addFlash(
+            'success',
+            'Recipe was delete successfully !'
+        );
+    
+        return $this->redirectToRoute('recipe.index');
     }
 }
