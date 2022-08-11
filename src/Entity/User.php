@@ -42,7 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: "string")]
     #[Assert\NotBlank()]
-    private $password;
+    private $password = 'password';
 
     #[ORM\Column(type: 'datetime_immutable')]
     #[Assert\NotNull()]

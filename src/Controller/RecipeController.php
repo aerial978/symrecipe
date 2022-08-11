@@ -36,7 +36,7 @@ class RecipeController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $form->getData();
+            $recipe = $form->getData();
 
             $manager->persist($recipe);
             $manager->flush();
