@@ -1,12 +1,11 @@
 {% extends "base.html.twig" %}
 {% block title %}Symrecipe - Accueil{% endblock %}
 {% block body %}
-<body id="body">
+<body id="background">
 	<div class="container">
 		<div class="jumbotron">
-			<h5 class="display-6 mb-5 text-primary">Bienvenue !</h5>
-			<div class="row">
-				<div class="col-5 pr-4">
+			<h5 class="display-6 mb-5 text-primary">Welcome !</h5>
+			
 					<h5 class="lh-lg">
 						<strong>Symrecipe</strong>
 						is an application that will allow you to
@@ -14,17 +13,12 @@
                         based on ingredients that you will have created yourself. 
                         You will be able<strong> share </strong>your recipes
                         <strong> community </strong>
-                        site, or keep them private.
-					</h5>
-				</div>
-				<div class="col-1"></div>
-				<div class="col-6 p-5">
-					<h5 class="lh-lg mb-5">Meet on the
+                        site, or keep them private.<br><br>Meet on the
                     <strong>registration page</strong>
                     to use the app.</h5>
 					<p class="lead">
 						<div class="d-flex justify-content-end">
-							<a class="btn btn-primary btn-lg" href="#" role="button">Registration</a>
+							<a class="btn btn-primary btn-lg" href="{{ path("security.registration") }}" role="button">Sign Up</a>
 						</div>
 					</p>
 				</div>

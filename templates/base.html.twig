@@ -11,6 +11,20 @@
            {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
+    <style>
+        #background {
+            background: url("/images/background.jpg");
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .jumbotron {
+            padding-top: 150px;
+            padding-left: 630px;
+            transform: rotate(8deg);
+        }
+    </style>
     <body>
         {% block header %}
             {% include "partials/_header.html.twig" %}

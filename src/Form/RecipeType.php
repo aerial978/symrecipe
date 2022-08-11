@@ -154,7 +154,7 @@ class RecipeType extends AbstractType
             'attr' => [
                 'class' => 'btn btn-primary'
             ],
-            'label' => 'Update Recipe'
+            'label' => 'Submit'
         ]);
         
     }

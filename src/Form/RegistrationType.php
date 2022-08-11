@@ -93,7 +93,7 @@ class RegistrationType extends AbstractType
                 'attr' => [
                     'class' => 'btn btn-primary mt-4'
                 ],
-                'label' => 'Registration'
+                'label' => 'Submit'
             ]);
         ;
     }
