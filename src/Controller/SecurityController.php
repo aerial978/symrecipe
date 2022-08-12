@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationType;
+use Symfony\Component\Mime\Email;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,7 +34,7 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/registration', name: 'security.registration', methods: ['GET','POST'])]
-    public function registration(EntityManagerInterface $manager, Request $request): Response
+    public function registration(EntityManagerInterface $manager, MailerInterface $mailer, Request $request): Response
     {
         $user = new User();
         $user -> setRoles(['ROLE_USER']);
@@ -44,6 +46,15 @@ class SecurityController extends AbstractController
 
             $manager->persist($user);
             $manager->flush();
+
+            $email = (new Email())
+                ->from('mhathier@gmail.com')
+                ->to('contact@client.fr')
+                ->subject('Test')
+                ->text('Bravo, vous êtes enregistré !')
+                ->html('<p>See Twig integration for better HTML integration!</p>');
+
+            $mailer->send($email);
 
             $this->addFlash(
                 'success',
