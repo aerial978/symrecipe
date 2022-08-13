@@ -33,69 +33,68 @@ class RegistrationType extends AbstractType
                 new Assert\NotBlank()
             ]
         ])
-            ->add('pseudo', TextType::class, [
+        ->add('pseudo', TextType::class, [
+            'attr' => [
+                'class' => 'form-control',
+                'minlength' => '2',
+                'maxlength' => '50'
+            ],
+            'required' => false,
+            'label' => 'Pseudo (optional)',
+            'label_attr' => [
+                'class' => 'form-label mt-4'
+            ],
+            'constraints' => [
+                new Assert\Length(['min' => 2, 'max' => 50])
+            ]
+        ])
+
+        ->add('email', EmailType::class, [
+            'attr' => [
+                'class' => 'form-control',
+                'minlength' => '2',
+                'maxlength' => '180'
+            ],
+            'label' => 'Email address',
+            'label_attr' => [
+                'class' => 'form-label mt-4'
+            ],
+            'constraints' => [
+                new Assert\Email(),
+                new Assert\Length(['min' => 2, 'max' => 180]),
+                new Assert\NotBlank()
+            ]
+        ])
+
+        ->add('plainPassword', RepeatedType::class, [
+            'type' => PasswordType::class,
+            'first_options'  => [
                 'attr' => [
                     'class' => 'form-control',
-                    'minlength' => '2',
-                    'maxlength' => '50'
                 ],
-                'required' => false,
-                'label' => 'Pseudo (optional)',
+                'label' => 'Password',
+                'label_attr' => [
+                    'class' => 'form-label mt-4'
+                ]
+            ],
+            'second_options' => [
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'label' => 'Confirm Password',
                 'label_attr' => [
                     'class' => 'form-label mt-4'
                 ],
-                'constraints' => [
-                    new Assert\Length(['min' => 2, 'max' => 50])
-                ]
-            ])
+                'invalid_message' => 'The password fields must match !'
+            ],
+        ])
 
-            ->add('email', EmailType::class, [
-                'attr' => [
-                    'class' => 'form-control',
-                    'minlength' => '2',
-                    'maxlength' => '180'
-                ],
-                'label' => 'Email address',
-                'label_attr' => [
-                    'class' => 'form-label mt-4'
-                ],
-                'constraints' => [
-                    new Assert\Email(),
-                    new Assert\Length(['min' => 2, 'max' => 180]),
-                    new Assert\NotBlank()
-                ]
-            ])
-
-            ->add('plainPassword', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'first_options'  => [
-                    'attr' => [
-                        'class' => 'form-control',
-                    ],
-                    'label' => 'Password',
-                    'label_attr' => [
-                        'class' => 'form-label mt-4'
-                    ]
-                ],
-                'second_options' => [
-                    'attr' => [
-                        'class' => 'form-control',
-                    ],
-                    'label' => 'Confirm Password',
-                    'label_attr' => [
-                        'class' => 'form-label mt-4'
-                    ],
-                    'invalid_message' => 'The password fields must match !'
-                ],
-            ])
-
-            ->add('submit', SubmitType::class, [
-                'attr' => [
-                    'class' => 'btn btn-primary mt-4'
-                ],
-                'label' => 'Submit'
-            ]);
-        ;
+        ->add('submit', SubmitType::class, [
+            'attr' => [
+                'class' => 'btn btn-primary mt-4'
+            ],
+            'label' => 'Submit'
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

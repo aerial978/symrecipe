@@ -46,7 +46,7 @@ class SecurityController extends AbstractController
 
             $manager->persist($user);
             $manager->flush();
-
+            
             $email = (new Email())
                 ->from('mhathier@gmail.com')
                 ->to('contact@client.fr')
