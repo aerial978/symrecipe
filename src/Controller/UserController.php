@@ -31,6 +31,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             if($hasher->isPasswordValid($user, $form->getData()->getPlainPassword())) {
                 $user = $form->getData();
+
                 $manager->persist($user);
                 $manager->flush();
 
@@ -42,12 +43,10 @@ class UserController extends AbstractController
             return $this->redirectToRoute('recipe.index');
 
             } else {
-
                 $this->addFlash(
                     'warning',
                     'Invalid password !'
                 );
-
             }
         }
 
@@ -59,7 +58,41 @@ class UserController extends AbstractController
     #[Route('/user/edit-password/{id}', name: 'user.edit.password', methods: ['GET','POST'])]
     public function editPassword(User $user, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher, Request $request): Response
     {
+        if(!$this->getUser()) {
+            return $this->redirectToRoute('security.login');
+        }
+
+        if($this->getUser() !== $user) {
+            return $this->redirectToRoute('recipe.index');
+        }
+        
         $form = $this->createForm(UserPasswordType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if($hasher->isPasswordValid($user, $form->getData()['plainPassword'])) {
+                $user->setUpdatedAt(new \DateTimeImmutable());
+                $user->setPlainPassword(
+                    $form->getData()['newPassword']
+                );
+
+                $manager->persist($user);
+                $manager->flush();
+
+                $this->addFlash(
+                    'success',
+                    'Password modified successfully !'
+                );
+
+                return $this->redirectToRoute('recipe.index');
+            } else {
+                $this->addFlash(
+                    'warning',
+                    'Invalid password !'
+                );
+            }
+         }
+        
         
         return $this->render('pages/user/edit_password.html.twig', [
             'form' => $form->createView()
