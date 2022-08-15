@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Form\UserPasswordType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,15 +43,25 @@ class UserController extends AbstractController
 
             } else {
 
-            $this->addFlash(
-                'warning',
-                'Invalid password !'
-            );
+                $this->addFlash(
+                    'warning',
+                    'Invalid password !'
+                );
 
             }
         }
 
         return $this->render('pages/user/edit.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/user/edit-password/{id}', name: 'user.edit.password', methods: ['GET','POST'])]
+    public function editPassword(User $user, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher, Request $request): Response
+    {
+        $form = $this->createForm(UserPasswordType::class);
+        
+        return $this->render('pages/user/edit_password.html.twig', [
             'form' => $form->createView()
         ]);
     }

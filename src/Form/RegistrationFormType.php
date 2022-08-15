@@ -5,10 +5,9 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints\IsTrue;
-use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
+
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -75,7 +74,8 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'attr' => [
                 'autocomplete' => 'new-password',
-                'class' => 'form-control'
+                'class' => 'form-control',
+                'placeholder' => 'at least 6 characters'
                 ],
                 'label' => 'Password',
                 'label_attr' => [
@@ -107,7 +107,7 @@ class RegistrationFormType extends AbstractType
         ->add('agreeTerms', CheckboxType::class, [
             'mapped' => false,
             'constraints' => [
-                new IsTrue([
+                new Assert\IsTrue([
                     'message' => 'You should agree to our terms.',
                 ]),
             ],
