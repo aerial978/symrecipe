@@ -6,7 +6,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav m-auto">
+            <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
                     <a href="{{ path('home.index') }}"><h4 class="nav-link">Home</h4></a>
                         <span class="visually-hidden">(current)</span>
@@ -23,7 +23,18 @@
                     </h4>
                 </li>
             </ul>
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav flex-row ms-auto">
+                {% if app.user %}
+                    <li class="nav-item me-3 me-lg-1">
+                        <div class="nav-link d-sm-flex align-items-sm-center">
+                            <i class="fa-solid fa-circle-user me-3" style="font-size:35px;"></i>
+                            <h5 class="d-none d-sm-block ms-1">{{ app.user.userIdentifier }}</h5>
+                            <a class="nav-link" href="{{ path('security.logout') }}">
+                                <i class="fa-solid fa-right-from-bracket fa-xl ms-3"></i>
+                            </a>
+                        </div>
+                    </li>
+                {% else %}
                 <li class="nav-item">
                     <a href="{{ path('security.login') }}"><h4 class="nav-link">Sign in</h4></a>
                         <span class="visually-hidden">(current)</span>
@@ -34,6 +45,7 @@
                         <span class="visually-hidden">(current)</span>
                     </h4>
                 </li>
+                {% endif %}  
             </ul>
         </div>
     </div>
