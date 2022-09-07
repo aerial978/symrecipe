@@ -57,6 +57,7 @@ class UserPasswordtype extends AbstractType
         ->add('newPassword', PasswordType::class, [
             'attr' => [
                 'class' => 'form-control',
+                'placeholder' => 'at least 6 characters'
             ],
             'label' => 'New Password',
             'label_attr' => [

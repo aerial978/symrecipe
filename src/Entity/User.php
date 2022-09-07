@@ -9,11 +9,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-
-/*#[UniqueEntity('email')]*/
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\EntityListeners(['App\EntityListener\UserListener'])]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email !')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -72,7 +70,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->fullname;
     }
 
-    public function setFullname(string $fullname): self
+    public function setFullname(?string $fullname): self
     {
         $this->fullname = $fullname;
 
