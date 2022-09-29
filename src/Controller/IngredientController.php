@@ -10,11 +10,14 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class IngredientController extends AbstractController
 {
     #[Route('/ingredient', name: 'ingredient.index', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
     public function index(IngredientRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $ingredients = $paginator->paginate(
@@ -29,6 +32,7 @@ class IngredientController extends AbstractController
     }
 
     #[Route('/ingredient/new', name: 'ingredient.new', methods: ['GET','POST'])]
+    #[IsGranted('ROLE_USER')]
     public function new(EntityManagerInterface $manager, Request $request): Response
     {
         $ingredient = new Ingredient();
@@ -57,6 +61,7 @@ class IngredientController extends AbstractController
     }
 
     #[Route('/ingredient/edit/{id}', name: 'ingredient.edit', methods: ['GET','POST'])]
+    #[Security("is_granted('ROLE_USER') and user === ingredient.getUser()")]
     public function edit(ingredient $ingredient, EntityManagerInterface $manager, Request $request): Response
     {
         $form = $this->createForm(IngredientType::class, $ingredient);

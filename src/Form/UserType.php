@@ -52,6 +52,7 @@ class UserType extends AbstractType
         ->add('plainPassword', PasswordType::class, [
                 'attr' => [
                     'class' => 'form-control',
+                    'placeholder' =>'********'
                 ],
                 'label' => 'Password',
                 'label_attr' => [

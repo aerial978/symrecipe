@@ -9,27 +9,21 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
     #[Route('/user/edit/{id}', name: 'user.edit', methods: ['GET','POST'])]
-    public function edit(User $user, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher, Request $request): Response
+    #[Security("is_granted('ROLE_USER') and user === identifiedUser")]
+    public function edit(User $identifiedUser, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher, Request $request): Response
     {
-        if(!$this->getUser()) {
-            return $this->redirectToRoute('security.login');
-        }
-
-        if($this->getUser() !== $user) {
-            return $this->redirectToRoute('recipe.index');
-        }
-
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserType::class, $identifiedUser);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if($hasher->isPasswordValid($user, $form->getData()->getPlainPassword())) {
+            if($hasher->isPasswordValid($identifiedUser, $form->getData()->getPlainPassword())) {
                 $user = $form->getData();
 
                 $manager->persist($user);
@@ -56,27 +50,20 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/edit-password/{id}', name: 'user.edit.password', methods: ['GET','POST'])]
-    public function editPassword(User $user, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher, Request $request): Response
+    #[Security("is_granted('ROLE_USER') and user === identifiedUser")]
+    public function editPassword(User $identifiedUser, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher, Request $request): Response
     {
-        if(!$this->getUser()) {
-            return $this->redirectToRoute('security.login');
-        }
-
-        if($this->getUser() !== $user) {
-            return $this->redirectToRoute('recipe.index');
-        }
-        
         $form = $this->createForm(UserPasswordType::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if($hasher->isPasswordValid($user, $form->getData()['plainPassword'])) {
-                $user->setUpdatedAt(new \DateTimeImmutable());
-                $user->setPlainPassword(
+            if($hasher->isPasswordValid($identifiedUser, $form->getData()['plainPassword'])) {
+                $identifiedUser->setUpdatedAt(new \DateTimeImmutable());
+                $identifiedUser->setPlainPassword(
                     $form->getData()['newPassword']
                 );
 
-                $manager->persist($user);
+                $manager->persist($identifiedUser);
                 $manager->flush();
 
                 $this->addFlash(
