@@ -37,7 +37,7 @@ class UserPasswordType extends AbstractType
                     ]),
                     new Assert\Length([
                         'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'minMessage' => 'Your password should be at least {{ limit }} characters !',
                         // longueur max autorisée par Symfony pour des raisons de sécurité
                         'max' => 4096,
                     ]),

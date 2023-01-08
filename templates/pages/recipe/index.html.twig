@@ -8,7 +8,7 @@
     <h1>Recipes</h1>
 
     {% if not recipes.items is same as([]) %}
-
+    
     {% for message in app.flashes('success') %}
         <div class="alert alert-success mt-4">
             {{ message }}

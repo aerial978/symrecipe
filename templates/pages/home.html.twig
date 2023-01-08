@@ -1,31 +1,55 @@
 {% extends "base.html.twig" %}
-{% block title %}Symrecipe - Accueil{% endblock %}
+{% block title %}Symrecipe - Accueil
+{% endblock %}
 {% block body %}
-<body id="background">
-	<div class="container">
-		<div class="jumbotron">
-			<h5 class="display-6 mb-5 text-primary">Welcome !</h5>
-			
+	<body>
+		<div class="container pt-5">
+			<div class="row my-5">
+				<div class="col-xl-7">
+					<img src="../images/vegetables.jpg" class="img-fluid">
+				</div>
+				<div class="col-xl-5 p-2">
+					<h3 class="mb-5 text-primary">Welcome !</h3>
 					<h5 class="lh-lg">
 						<strong>Symrecipe</strong>
 						is an application that will allow you to
-                        <strong>create recipes</strong>
-                        based on ingredients that you will have created yourself. 
-                        You will be able<strong> share </strong>your recipes
-                        <strong> community </strong>
-                        site, or keep them private.<br><br>Meet on the
-                    <strong>registration page</strong>
-                    to use the app.</h5>
+						<strong>create recipes</strong>
+						based on ingredients that you will have created yourself. 
+						You will be able
+						<strong>share</strong>
+						your recipes
+						<strong>community</strong>
+						site, or keep them private.<br><br>Meet on the
+						<strong>registration page</strong>
+						to use the app.
+					</h5>
 					<p class="lead">
 						<div class="d-flex justify-content-end">
-							<a class="btn btn-primary btn-lg" href="{{ path("security.registration") }}" role="button">Sign Up</a>
+							<a class="btn btn-primary" href="{{ path("security.registration") }}" role="button">Sign Up</a>
+						</div>
+					</p>
+				</div>
+			</div>
+			<div class="recipes">
+					<h2 class="my-5 text-center">Community recipes</h2>
+					<div class="d-flex justify-content-between">
+						{% for recipe in recipes %}
+							<div class="card border-primary m-3 mb-3" style="max-width: 20rem;">
+								<div class="card-header">Recipe n°{{ recipe.id }}</div>
+								<div class="card-body">
+									<h4 class="card-title">{{ recipe.name }}</h4>
+									<p class="card-text">{{ recipe.description|slice(0,100)~ '...' }}</p>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+					<p class="lead">
+						<div class="d-flex justify-content-center">
+							<a class="btn btn-primary" href="{{ path("recipe.index.public") }}" role="button">See all</a>
 						</div>
 					</p>
 				</div>
 			</div>
 		</div>
-	</div>
-</body>
-
+	</body>
 {% endblock %}
-

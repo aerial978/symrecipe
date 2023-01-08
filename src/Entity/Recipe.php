@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[UniqueEntity('name')]
 #[ORM\HasLifecycleCallbacks]
@@ -52,10 +53,15 @@ class Recipe
     #[ORM\Column(type: "boolean")]
     private $isFavorite;
 
+    #[ORM\Column(type: 'boolean')]
+    private $isPublic;
+
+    #[Gedmo\Timestampable(on:"create")]
     #[ORM\Column(type: 'datetime_immutable')]
     #[Assert\NotNull()]
     private $createdAt;
 
+    #[Gedmo\Timestampable(on:"update")]
     #[ORM\Column(type: 'datetime_immutable')]
     #[Assert\NotNull()]
     private $updatedAt;
@@ -70,15 +76,15 @@ class Recipe
     public function __construct()
     {
         $this->ingredients = new ArrayCollection();
-        $this->createdAt = new \DateTimeImmutable();
-        $this->updatedAt = new \DateTimeImmutable();
+        /*$this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();*/
     }
-
+/*
     #[ORM\PrePersist]
     public function setUpdateAtValue()
     {
         $this->updatedAt = new \DateTimeImmutable();
-    }
+    }*/
 
     public function getId(): ?int
     {
@@ -157,7 +163,7 @@ class Recipe
         return $this;
     }
 
-    public function isIsFavorite(): ?bool
+    public function getIsFavorite(): ?bool
     {
         return $this->isFavorite;
     }
@@ -169,29 +175,41 @@ class Recipe
         return $this;
     }
 
+    public function getIsPublic(): ?bool
+    {
+        return $this->isPublic;
+    }
+
+    public function setIsPublic(bool $isPublic): self
+    {
+        $this->isPublic = $isPublic;
+
+        return $this;
+    }
+
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
-
+/*
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
-    }
+    }*/
 
     public function getUpdateAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
-
+/*
     public function setUpdateAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
-    }
+    }*/
 
     /**
      * @return Collection<int, Ingredient>
@@ -228,4 +246,5 @@ class Recipe
 
         return $this;
     }
+
 }

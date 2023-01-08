@@ -31,14 +31,38 @@ class RecipeController extends AbstractController
         ]);
     }
 
+    #[Route('/recipe/public', name: 'recipe.index.public', methods: ['GET'])]
+    public function indexPublic(RecipeRepository $repository, PaginatorInterface $paginator, Request $request): Response
+    {
+        $recipes = $paginator->paginate(
+            $repository->findPublicRecipe(null),
+            $request->query->getInt('page', 1),
+            10
+        );
+        
+        return $this->render('pages/recipe/index_public.html.twig',[
+            'recipes' => $recipes
+        ]);
+    }
+
+    // Allow us to see a recipe if this one is public
+    #[Route('/recipe/{id}', name: 'recipe.show', methods: ['GET'])]
+    #[Security("is_granted('ROLE_USER') and recipe.getIsPublic() === true")]
+    public function show(Recipe $recipe) : Response
+    {
+        return $this->render('pages/recipe/show.html.twig', [
+            'recipe' => $recipe,
+        ]);
+    }
+
     #[Route('/recipe/new', name: 'recipe.new', methods: ['GET','POST'])]
     #[IsGranted('ROLE_USER')]
     public function new(EntityManagerInterface $manager, Request $request): Response
     {
         $recipe = new Recipe();
         $form = $this->createForm(RecipeType::class, $recipe);
-
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $recipe = $form->getData();
             $recipe->setUser($this->getUser());
@@ -80,7 +104,6 @@ class RecipeController extends AbstractController
 
             return $this->redirectToRoute('recipe.index');
         }
-        
         
         return $this->render('pages/recipe/edit.html.twig', [
             'form' => $form->createview()
