@@ -17,6 +17,11 @@
                     <h4 class="card-title">{{ recipe.name }}</h4>
                     <p class="card-text">{{ recipe.description|slice(0,100)~ '...' }}</p>
                 </div>
+                <p class="lead">
+                    <div class="d-flex justify-content-center">
+                        <a class="btn btn-primary" href="{{ path('recipe.show', {'id': recipe.id}) }}" role="button"><i class="fa-solid fa-plus"></i></a>
+                    </div>
+                </p>
             </div>
         {% endfor %}
     </div>
