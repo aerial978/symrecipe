@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use ORM\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\RecipeRepository;
 use Doctrine\Common\Collections\Collection;
@@ -10,10 +9,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[UniqueEntity('name')]
-#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
+#[Vich\Uploadable]
 class Recipe
 {
     #[ORM\Id]
@@ -25,6 +26,12 @@ class Recipe
     #[Assert\NotBlank()]
     #[Assert\Length(min: 2, max: 50)]
     private $name;
+
+    #[Vich\UploadableField(mapping: 'recipe_images', fileNameProperty: 'imageName')]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $imageName = null;
 
     #[ORM\Column(type: 'integer', nullable: true)]
     #[Assert\Positive()]
@@ -54,17 +61,15 @@ class Recipe
     private $isFavorite;
 
     #[ORM\Column(type: 'boolean')]
-    private $isPublic;
+    private $isPublic = false;
 
-    #[Gedmo\Timestampable(on:"create")]
-    #[ORM\Column(type: 'datetime_immutable')]
-    #[Assert\NotNull()]
-    private $createdAt;
+    #[Gedmo\Timestampable(on:'create')]
+    #[ORM\Column(type:'datetime')]
+    protected $createdAt;
 
-    #[Gedmo\Timestampable(on:"update")]
-    #[ORM\Column(type: 'datetime_immutable')]
-    #[Assert\NotNull()]
-    private $updatedAt;
+    #[Gedmo\Timestampable(on:'update')]
+    #[ORM\Column(type:'datetime', nullable : true)]
+    protected $updatedAt;
 
     #[ORM\ManyToMany(targetEntity: Ingredient::class)]
     private Collection $ingredients;
@@ -107,6 +112,31 @@ class Recipe
         $this->name = $name;
 
         return $this;
+    }
+
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        /*if (null !== $imageFile) {
+
+            $this->updatedAt = new \DateTimeImmutable();
+        }*/
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
     }
 
     public function getTime(): ?int
@@ -193,7 +223,7 @@ class Recipe
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
@@ -205,7 +235,7 @@ class Recipe
         return $this;
     }*/
 
-    public function getUpdateAt(): ?\DateTimeImmutable
+    public function getUpdateAt(): ?\DateTime
     {
         return $this->updatedAt;
     }

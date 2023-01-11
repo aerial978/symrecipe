@@ -18,7 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class RecipeType extends AbstractType
 {
@@ -90,7 +90,7 @@ class RecipeType extends AbstractType
                 'max' => 5
             ],
             'required' => false,
-            'label' => 'difficulty',
+            'label' => 'Difficulty',
             'label_attr' => [
                 'class' => 'form-label mt-4'
             ],
@@ -135,7 +135,7 @@ class RecipeType extends AbstractType
                 'class' => 'form-check-input'
             ],
             'required' => false,
-            'label' => 'Favoris ?',
+            'label' => 'Favoris',
             'label_attr' => [
                 'class' => 'form-check-label'
             ],
@@ -149,12 +149,23 @@ class RecipeType extends AbstractType
                 'class' => 'form-check-input'
             ],
             'required' => false,
-            'label' => 'Publique ?',
+            'label' => 'Publique',
             'label_attr' => [
                 'class' => 'form-check-label'
             ],
             'constraints' => [
                 new Assert\NotNull()
+            ]
+        ])
+        
+        ->add('imageFile', VichImageType::class, [
+            'required' => false,
+            'attr' => [
+            'class' => 'form-control',
+            ],
+            'label' => 'Recipe image',
+            'label_attr' => [
+                'class' => 'form-label mt-4'
             ]
         ])
 

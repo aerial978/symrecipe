@@ -34,6 +34,38 @@ class RecipeController extends AbstractController
         ]);
     }
 
+    #[Route('/recipe/new', name: 'recipe.new', methods: ['GET','POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function new(EntityManagerInterface $manager, Request $request): Response
+    {
+        $recipe = new Recipe();
+        $form = $this->createForm(RecipeType::class, $recipe);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $recipe = $form->getData();
+            $recipe->setUser($this->getUser());
+
+           
+
+          $manager->persist($recipe);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Your recipe was created successfully !'
+            );
+
+            return $this->redirectToRoute('recipe.index');
+        }
+
+
+        
+        return $this->render('pages/recipe/new.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
     #[Route('/recipe/public', name: 'recipe.index.public', methods: ['GET'])]
     public function indexPublic(RecipeRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
@@ -50,7 +82,7 @@ class RecipeController extends AbstractController
 
     // Allow us to see a recipe if this one is public
     #[Route('/recipe/{id}', name: 'recipe.show', methods: ['GET','POST'])]
-    #[Security("is_granted('ROLE_USER') and recipe.getIsPublic() === true")]
+    #[Security("is_granted('ROLE_USER') and recipe.getIsPublic() === true || user === recipe.getUser()")]
     public function show(Recipe $recipe, MarkRepository $markRepository, EntityManagerInterface $manager, Request $request) : Response
     {
         $mark = new Mark();
@@ -87,34 +119,6 @@ class RecipeController extends AbstractController
         
         return $this->render('pages/recipe/show.html.twig', [
             'recipe' => $recipe,
-            'form' => $form->createView()
-        ]);
-    }
-
-    #[Route('/recipe/new', name: 'recipe.new', methods: ['GET','POST'])]
-    #[IsGranted('ROLE_USER')]
-    public function new(EntityManagerInterface $manager, Request $request): Response
-    {
-        $recipe = new Recipe();
-        $form = $this->createForm(RecipeType::class, $recipe);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $recipe = $form->getData();
-            $recipe->setUser($this->getUser());
-
-            $manager->persist($recipe);
-            $manager->flush();
-
-            $this->addFlash(
-                'success',
-                'Your recipe was created successfully !'
-            );
-
-            return $this->redirectToRoute('recipe.index');
-        }
-        
-        return $this->render('pages/recipe/new.html.twig', [
             'form' => $form->createView()
         ]);
     }

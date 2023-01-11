@@ -37,8 +37,8 @@ class IngredientController extends AbstractController
     {
         $ingredient = new Ingredient();
         $form = $this->createForm(IngredientType::class, $ingredient);
-
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             
             $ingredient = $form->getData();
