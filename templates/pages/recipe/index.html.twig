@@ -1,27 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Recipes List - Symrecipe{% endblock %}
+{% block title %}Recipe Index - Symrecipe{% endblock %}
 
 {% block body %}
 
 <div class="container mt-5">
-    <h1>Recipes</h1>
-
-    {% if not recipes.items is same as([]) %}
-    
     {% for message in app.flashes('success') %}
         <div class="alert alert-success mt-4">
             {{ message }}
         </div>
     {% endfor %}
-
-    <div class="d-flex justify-content-between my-4">
-        <div class="count">
-            <h5>Recipes total : {{ recipes.getTotalItemCount }}</h5>
+    
+    {% if not recipes.items is same as([]) %}
+        <h1>Recipes</h1>
+        <div class="d-flex justify-content-between my-4">
+            <div class="count">
+                <h5>Total recipe : {{ recipes.getTotalItemCount }}</h5>
+            </div>
+            <a href="{{ path('recipe.new') }}" class="btn btn-primary">Add</a>
         </div>
-        <a href="{{ path('recipe.new') }}" class="btn btn-primary">Add</a>
-    </div>
-
         <table class="table table-hover">
             <thead>
                 <tr class="text-center">
@@ -38,7 +35,7 @@
                     <tr class="table-success">
                         <th scope="row">{{ recipe.id }}</th>
                         <td>{{ recipe.name }}</td>
-                        <td>{% if recipe.price is null %}Non renseigné{% else %}{{ recipe.price }} {% endif %}</td>
+                        <td>{% if recipe.price is null %}Non renseigné{% else %}{{ recipe.price|number_format(2, '.', ',') }} € {% endif %}</td>
                         <td>{% if recipe.difficulty is null %}Non renseigné{% else %}{{ recipe.difficulty }} {% endif %}</td>
                         <td>{{ recipe.createdAt|date('d/m/Y') }}</td>
                         <td><a href="{{ path('recipe.edit', {id: recipe.id}) }}" class="btn btn-info">Edit</a></td>
@@ -52,6 +49,7 @@
         </div>
     {% else %}
         <h4>There is no recipes !</h4>
+        <a href="{{ path('recipe.new') }}" class="btn btn-primary">Add</a>
     {% endif %}
 </div>
 {% endblock %}

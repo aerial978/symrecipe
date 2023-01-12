@@ -3,6 +3,7 @@
 {% block title %}Login - Symrecipe{% endblock %}
 
 {% block body %}
+<div class="h-75">
     <div class="container">
         <h1 class="mt-4">Sign in</h1>
         {% for message in app.flashes('success') %}
@@ -32,4 +33,5 @@
             </form>
         </div>
     </div>
+</div>
 {% endblock %}
