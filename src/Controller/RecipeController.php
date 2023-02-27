@@ -58,8 +58,6 @@ class RecipeController extends AbstractController
 
             return $this->redirectToRoute('recipe.index');
         }
-
-
         
         return $this->render('pages/recipe/new.html.twig', [
             'form' => $form->createView()

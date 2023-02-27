@@ -1,0 +1,14 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+       <h1>Demande de {{ contact.fullName }}</h1>
+       <p>Email : {{ contact.email }} </p>
+       <p>Subject : {{ contact.subject }}</p>
+       <p>Message :</p>
+       <div>
+        {{ contact.message|raw }}
+       </div>
+    </body>
+</html>
