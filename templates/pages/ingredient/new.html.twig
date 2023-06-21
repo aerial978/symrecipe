@@ -37,6 +37,16 @@
 
     {{ form_end(form) }}
 </div>
-
-
+{% endblock %}
+{% block js %}
+	{% if app.flashes("coco")[0] is defined %}
+		<script>
+			Swal.fire({
+            title: 'Data',
+            text: 'Data !',
+            icon: 'success',
+            confirmButtonText: 'Cool'
+            })
+		</script>
+	{% endif %}
 {% endblock %}
