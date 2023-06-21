@@ -48,11 +48,10 @@ class IngredientController extends AbstractController
             $manager->flush();
 
             $this->addFlash(
-                'success',
-                'Your ingredient was created successfully !'
+                'coco', true
             );
 
-            return $this->redirectToRoute('ingredient.index');
+            /*return $this->redirectToRoute('ingredient.index');*/
         }
         
         return $this->render('pages/ingredient/new.html.twig', [
