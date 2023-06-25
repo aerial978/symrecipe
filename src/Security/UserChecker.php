@@ -7,6 +7,8 @@ use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bridge\Twig\Extension\TranslationExtension;
+use Symfony\Contracts\Translation\TranslatableInterface;
 
 class UserChecker extends AbstractController implements UserCheckerInterface
 {

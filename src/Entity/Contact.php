@@ -29,7 +29,7 @@ class Contact
     #[Assert\Length(min: 2, max: 100)]
     private ?string $subject = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: 'text')]
     #[Assert\NotBlank()]
     private ?string $message = null;
 
